@@ -11,7 +11,6 @@ import java.util.Scanner;
 public class Classifier {
 
 	private File testData;
-	private File testLabels;
 	/**
 	 * Contains probability of each label for any test example
 	 * The label with the maximum probability is eventually made the predicted label
@@ -23,9 +22,8 @@ public class Classifier {
 	private List<String> predictedLabels;
 	private Trainer trainer;
 	
-	Classifier(File testData,File testLabels,Trainer trainer){
+	Classifier(File testData,Trainer trainer){
 		this.testData=testData;
-		this.testLabels=testLabels;
 		this.trainer=trainer;
 		this.predictedLabels=new ArrayList<String>();
 		this.probLabel=new HashMap<String,Double>();
@@ -68,18 +66,6 @@ public class Classifier {
 		return predictedLabel;
 	}
 	
-	public double getClassificationAccuracy() throws FileNotFoundException {
-		int correctClassified=0;
-		int m=predictedLabels.size();
-		Scanner sc=new Scanner(testLabels);
-		for(int i=0;i<m;i++) {
-			if(predictedLabels.get(i).equals(sc.nextLine().trim())) {
-				correctClassified++;
-			}
-		}
-		double accuracy=correctClassified*1.0/m;
-		sc.close();
-		return accuracy;
-	}
+	
 	
 }
