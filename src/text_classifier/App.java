@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.util.List;
 
 public class App {
-	
-	static File trainData = new File("resources/traindata.txt");
-	static File trainLabels=new File("resources/trainlabels.txt");
-	static File testData=new File("resources/testdata.txt");
-	static File testLabels=new File("resources/testlabels.txt");
+	//To change the test and train data
+	static File trainData = new File(Constants.TRAIN_DATA_LOC);
+	static File trainLabels=new File(Constants.TRAIN_LABELS_LOC);
+	static File testData=new File(Constants.TEST_DATA_LOC);
+	static File testLabels=new File(Constants.TEST_LABELS_LOC);
 
 	public static void main(String[] args) {	
 		try {
@@ -20,9 +20,8 @@ public class App {
 			Classifier classifier=new Classifier(testData,trainer);
 			List<String> predictedLabels=classifier.classify();
 		
-			// the file passed as testData must be same for both classifier and reportGenerator
-			// the corresponding labels must be used for each file
-			ReportGenerator reportGenerator=new ReportGenerator();
+			// the same data file must be passed to classifier and reportGenerator
+			ReportGenerator reportGenerator=new ReportGenerator(trainData);
 			reportGenerator.generateReport(testData, testLabels, predictedLabels);
 			
 		} catch (FileNotFoundException e) {

@@ -9,14 +9,19 @@ import java.util.Scanner;
 
 public class ReportGenerator {
 	FileWriter reportWriter;
-	ReportGenerator() throws IOException{
-		this.reportWriter=new FileWriter("resources/results.txt");
+	File trainData;
+	ReportGenerator(File trainData) throws IOException{
+		this.reportWriter=new FileWriter(Constants.REPORT_FILE_LOC);
+		this.trainData=trainData;
 	}
 	
 	public void generateReport(File testData,File testLabels,List<String> predictedLabels) throws FileNotFoundException, IOException {
-		reportWriter.write("File name --- "+testData.getName()+" predictions .........");
 		Scanner sc=new Scanner(testData);
 		int lineCounter=0;
+		reportWriter.write("Test data file used     ------ "+testData.getName()+"\n");
+		reportWriter.write("Train data file  used   ------ "+trainData.getName()+"\n");
+		reportWriter.write("num docs  in test data  ------ "+predictedLabels.size()+"\n");
+		reportWriter.write("Classification Accuracy ------ "+this.getClassificationAccuracy(predictedLabels,testLabels)+"% \n");
 		while(sc.hasNextLine()) {
 			//reportWriter.write(sc.nextLine());
 			sc.nextLine();
@@ -24,7 +29,6 @@ public class ReportGenerator {
 			lineCounter++;
 		}
 		sc.close();
-		reportWriter.write("Classification Accuracy   ----  "+this.getClassificationAccuracy(predictedLabels,testLabels));
 		reportWriter.close();
 	}
 	
@@ -36,8 +40,9 @@ public class ReportGenerator {
 			if(predictedLabels.get(i).equals(sc.nextLine().trim())) {
 				correctClassified++;
 			}
+	
 		}
-		double accuracy=correctClassified*1.0/m;
+		double accuracy=correctClassified*100.0/m;
 		sc.close();
 		return accuracy;
 	}
